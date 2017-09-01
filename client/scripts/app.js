@@ -13,7 +13,7 @@ var app = {
       type: 'POST',
       //data: JSON.stringify(message),
       data: (message), // changed from stringify to pass tests
-      contentType: 'application/json',
+      contentType: 'PlainObject',
       success: function (data) {
         console.log('chatterbox: Message sent');
       },
@@ -30,7 +30,7 @@ var app = {
       type: 'GET',
       contentType: 'PlainObject',
       success: function (data) {
-        console.log('chatterbox: data recieved');
+        console.log('chatterbox: data recieved', data);
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -38,11 +38,21 @@ var app = {
       }
       
     });
-  
+  },
 
+  clearMessages: function() {
+    $('#chats').empty();
+  },
+
+  renderMessage: function(message) {
+    var msgBox = `<div class="msg-box">${message}</div>`;
+    $('#chats').append(msgBox);
+  },
+
+  renderRoom: function(roomName) {
+    var roomBox = `<div class="room-box">${roomName}</div>`;
+    $('#roomSelect').append(roomBox);
   }
-
- 
 
 
 };
