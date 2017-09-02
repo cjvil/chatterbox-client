@@ -1,7 +1,3 @@
-// var Parse = require('parse');
-var ReceivedMessages = Parse.Object.extend('ReceivedMessage');
-var receivedMessages = new ReceivedMessages();
-
 var app = {
 
   server: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
@@ -27,12 +23,24 @@ var app = {
       }
     });  
   },
+
+  
   //query: '?' + encodeURI('where={"createdAt":{"$gte":{"__type":"Date","iso":"2017-08-31T18:02:52.249Z"}}}'),
-  fetch: function(query = '') {
+  fetch: function(query = '', target) {
+    var magicWords = '';
+
+    if (query === 'recent100') {
+      magicWords = '?order=-createdAt';
+    } else if (query === 'byUsername') {
+      magicWords = '?where=' + encodeURIComponent('{"username":"' + target + '"}'); // pass username
+    } else if (query === 'byRoom') {
+      magicWords = '?where=' + encodeURIComponent('{"roomname":"' + target + '"}'); // pass room
+    }
+
     $.ajax({
 
 // use encodeURI to make string from instructions at http://docs.parseplatform.org/rest/guide/#data-types
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?where=%7B%22createdAt%22:%7B%22$gte%22:%7B%22__type%22:%22Date%22,%22iso%22:%222017-08-31T18:02:52.249Z%22%7D%7D%7D', //+ query,
+      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages' + magicWords,  //   ?order%3D-createdAt', //+ query,
       // url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=777&where',
       type: 'GET',
       contentType: 'PlainObject',
@@ -65,7 +73,6 @@ var app = {
     });
   },
 
-
 // testtesttest
   clearMessages: function() {
     $('#chats').empty();
@@ -80,7 +87,5 @@ var app = {
     var roomBox = `<div class="room-box">${roomName}</div>`;
     $('#roomSelect').append(roomBox);
   }
-
-
 };
 
