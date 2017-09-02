@@ -46,7 +46,9 @@ var app = {
       contentType: 'PlainObject',
       //data: '{"limit":"200"}',
       success: function (data) {
-        receivedMessages = data;
+        for ( var i = 0; i < data.results.length; i ++) {
+          app.renderMessage(data.results[i]);
+        }
         console.log('chatterbox: data recieved', data);
       },
       error: function (data) {
@@ -56,36 +58,34 @@ var app = {
       
     });
   },
-// testtesttest
-  getOptions: function() {
-    $.ajax({
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
-      type: 'OPTIONS',
-      contentType: 'PlainObject',
-      success: function (data) {
-        console.log('options are: ', data);
-      },
-      error: function (data) {
-        // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        console.error('chatterbox: Failed to fetch message', data);
-      }
-      
-    });
-  },
 
-// testtesttest
   clearMessages: function() {
     $('#chats').empty();
   },
 
   renderMessage: function(message) {
-    var msgBox = `<div class="msg-box">${message}</div>`;
+    var msgBox = `<div class="msg-box"></div>`;
+    var msg = `<div class="message"><span class="msg">${message.text}</span></div>`;
+    var user = `<div class="user"><span class="usr">${message.username}</span></div>`;
+
     $('#chats').append(msgBox);
+    console.log(msgBox);
+
+// append to last message box
+    //$(msgBox).append(msg + user);
+    $('.msg-box:last').append(msg + user);  //TODO select onlylasst one
   },
 
   renderRoom: function(roomName) {
     var roomBox = `<div class="room-box">${roomName}</div>`;
     $('#roomSelect').append(roomBox);
+  },
+  handleUsernameClick: function(usename) {
+
+  },
+
+  handleSubmit: function(e) {
+
   }
 };
 
