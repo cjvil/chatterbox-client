@@ -1,3 +1,7 @@
+// var Parse = require('parse');
+var ReceivedMessages = Parse.Object.extend('ReceivedMessage');
+var receivedMessages = new ReceivedMessages();
+
 var app = {
 
   server: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
@@ -23,13 +27,16 @@ var app = {
       }
     });  
   },
-
-  fetch: function() {
+  //query: '?' + encodeURI({"limit":"7"}),
+  fetch: function(query = '') {
     $.ajax({
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages' + query,
+      // url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=777&where',
       type: 'GET',
       contentType: 'PlainObject',
+      //data: '{"limit":"200"}',
       success: function (data) {
+        receivedMessages = data;
         console.log('chatterbox: data recieved', data);
       },
       error: function (data) {
@@ -39,7 +46,25 @@ var app = {
       
     });
   },
+// testtesttest
+  getOptions: function() {
+    $.ajax({
+      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      type: 'OPTIONS',
+      contentType: 'PlainObject',
+      success: function (data) {
+        console.log('options are: ', data);
+      },
+      error: function (data) {
+        // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
+        console.error('chatterbox: Failed to fetch message', data);
+      }
+      
+    });
+  },
 
+
+// testtesttest
   clearMessages: function() {
     $('#chats').empty();
   },
