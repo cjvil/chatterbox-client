@@ -27,10 +27,12 @@ var app = {
       }
     });  
   },
-  //query: '?' + encodeURI({"limit":"7"}),
+  //query: '?' + encodeURI('where={"createdAt":{"$gte":{"__type":"Date","iso":"2017-08-31T18:02:52.249Z"}}}'),
   fetch: function(query = '') {
     $.ajax({
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages' + query,
+
+// use encodeURI to make string from instructions at http://docs.parseplatform.org/rest/guide/#data-types
+      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?where=%7B%22createdAt%22:%7B%22$gte%22:%7B%22__type%22:%22Date%22,%22iso%22:%222017-08-31T18:02:52.249Z%22%7D%7D%7D', //+ query,
       // url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=777&where',
       type: 'GET',
       contentType: 'PlainObject',
