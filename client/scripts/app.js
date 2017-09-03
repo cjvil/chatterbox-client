@@ -3,9 +3,9 @@ var app = {
   server: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
 
   init: function() {
-  
+    app.fetch('recent100');
   },
-  
+
   send: function(message) {
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
@@ -13,9 +13,9 @@ var app = {
       type: 'POST',
       //data: JSON.stringify(message),
       data: (message), // changed from stringify to pass tests
-      contentType: 'PlainObject',
+      contentType: 'application/json',
       success: function (data) {
-        console.log('chatterbox: Message sent');
+        console.log('chatterbox: Message sent', message);
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -80,12 +80,48 @@ var app = {
     var roomBox = `<div class="room-box">${roomName}</div>`;
     $('#roomSelect').append(roomBox);
   },
-  handleUsernameClick: function(usename) {
-
+  handleUsernameClick: function(username) {
+    var friendChange = ($(username).text());
+    var allFriendElements = $('.usr').filter((index, element) => $(element).text() === friendChange);
+    //console.log(allFriendElements.text());
+    allFriendElements.toggleClass('friends');
   },
 
-  handleSubmit: function(e) {
+    /*var message = {
+  username: 'shawndrost',
+  text: 'trololo',
+  roomname: '4chan'}
+  */
 
+  handleSubmit: function(e) {
+    var newMessageString = $('textarea').val();
+    
+    var messageObj = {
+      username: app.user,
+      text: newMessageString,
+      roomname: '4chan' // TODO fix this to a variable
+   
+    };
+    console.log('submitting message now ', messageObj);
+    messageObj = JSON.stringify(messageObj);
+    app.send(messageObj);
   }
 };
+
+$(document).ready(function() {
+
+  app.init();
+  app.user = window.location.search;
+  console.log(app.user);
+  app.user = app.user.slice(app.user.indexOf('=') + 1);
+  console.log(app.user);
+  $('#chats').on('click', '.usr', function () { app.handleUsernameClick(this); });
+  $('#send-msg').click(function() { 
+    console.log('working'); 
+    app.handleSubmit(); 
+  }); 
+  
+  
+
+});
 

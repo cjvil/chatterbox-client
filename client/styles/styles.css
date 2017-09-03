@@ -91,3 +91,9 @@ form input[type=text] {
 .msg-box {
     border: 1px solid red;
 }
+.friends {
+    font-weight: bold;
+}
+textarea {
+
+}
